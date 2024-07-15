@@ -1,6 +1,7 @@
 import Card from './components/Card'
 import Header from './components/Header'
 import Drawer from './components/Drawer'
+import React from 'react';
 
 const arr = [
   {
@@ -23,16 +24,14 @@ const arr = [
     price: 4500,
     imageUrl: '/img/sneakers/4.jpg',
   },
-
-
 ]
 
 function App() {
+  const [cardOpened, setCardOpened] = React.useState(false);
   return (
     <div className="wrapper clear">
-      <div className="overlay" style={{ display: 'none' }}> <Drawer /></div>
-
-      <Header />
+      {cardOpened ? <Drawer /> : null}
+      <Header onClickCard={()=>setCardOpened(true)} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-30">
           <h1> Все кроссовки</h1>

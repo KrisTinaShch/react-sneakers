@@ -191,6 +191,7 @@ header {
       svg {
         transform: translateX(5px);
       }
+
     }
   }
 }
@@ -209,6 +210,24 @@ header {
 
   &:hover {
     background: lighten(#9dd558, 5%);
+  }
+
+  &.left {
+    position: relative;
+
+    svg {
+      position: absolute;
+      left: 30px;
+      top: 40%;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    &:hover {
+      svg {
+        transform: translateX(-5px);
+      }
+
+    }
   }
 
   &:active {

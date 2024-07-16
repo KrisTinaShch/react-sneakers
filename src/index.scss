@@ -49,12 +49,27 @@ header {
   border-radius: 10px;
   padding: 0 15px;
 
-  input {
-    border: 0;
-    padding: 13px;
-    font-size: 16px;
-    max-width: 200px;
+  div {
+    position: relative;
+
+    input {
+      border: 0;
+      padding: 13px;
+      font-size: 16px;
+      max-width: 200px;
+      position: relative;
+    }
+
+    img {
+      position: absolute;
+      top: 20%;
+      right: -1%;
+      width: 27px;
+    }
   }
+
+
+
 }
 
 .overlay {

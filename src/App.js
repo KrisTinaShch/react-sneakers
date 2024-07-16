@@ -5,27 +5,47 @@ import React from 'react';
 import axios from 'axios';
 
 function App() {
-  const [items, setItems] = React.useState([])
+  const [items, setItems] = React.useState([]);
   const [cardOpened, setCardOpened] = React.useState(false);
-  const [cartItems, setcartItems] = React.useState([]);
+  const [cartItems, setCartItems] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState('');
+
   React.useEffect(() => {
-    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items').then((res) => {
-      setItems(res.data);
-    });
-    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart').then((res) => {
-      setcartItems(res.data);
-    });
+    const fetchData = async () => {
+      try {
+        const itemsResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items');
+        setItems(itemsResponse.data);
+
+        const cartResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart');
+        setCartItems(cartResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-
-  const onAddToCart = (obj) => {
-    if (!cartItems.includes(obj)) {
-      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
-      setcartItems(prev => ([...prev, obj]));
+  const onAddToCart = async (obj) => {
+    try {
+      if (!cartItems.some(item => item.id === obj.id)) {
+        const response = await axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
+        setCartItems(prev => [...prev, response.data]);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
     }
-  }
+  };
 
-  const [searchValue, setSearchValue] = React.useState('');
+  const removeFromCart = async (id) => {
+    try {
+      await axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`);
+      setCartItems(prev => prev.filter(item => item.id !== id));
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
+  };
+
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   }
@@ -33,7 +53,7 @@ function App() {
 
   return (
     <div className="wrapper clear">
-      {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} />}
+      {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} onRemoveFromCart={removeFromCart} />}
       <Header onClickCard={() => setCardOpened(true)} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-30">

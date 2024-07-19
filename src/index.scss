@@ -102,6 +102,10 @@ header {
     margin: 0;
   }
 
+  .empty-cart {
+    margin-top: 50%;
+  }
+
   .cartItem {
     border: 1px solid #f3f3f3;
     border-radius: 20px;
@@ -116,6 +120,7 @@ header {
       background-repeat: no-repeat;
       margin-right: 20px;
     }
+
 
     p {
       font-size: 16px;

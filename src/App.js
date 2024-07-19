@@ -1,83 +1,99 @@
-import Card from './components/Card'
 import Header from './components/Header'
 import Drawer from './components/Drawer'
+import Home from './pages/Home'
+import Favorite from './pages/Favorites'
 import React from 'react';
 import axios from 'axios';
+import { Routes, Route } from 'react-router-dom'
 
 function App() {
   const [items, setItems] = React.useState([]);
   const [cardOpened, setCardOpened] = React.useState(false);
   const [cartItems, setCartItems] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
+  const [isFavorite, setFavorite] = React.useState([]);
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const itemsResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items');
-        setItems(itemsResponse.data);
+    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items')
+      .then((res) => {
+        setItems(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching items:', error);
+      });
 
-        const cartResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart');
-        setCartItems(cartResponse.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
+    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart')
+      .then((res) => {
+        setCartItems(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching cart items:', error);
+      });
   }, []);
 
-  const onAddToCart = async (obj) => {
-    try {
-      if (!cartItems.some(item => item.id === obj.id)) {
-        const response = await axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
-        setCartItems(prev => [...prev, response.data]);
-      }
-    } catch (error) {
-      console.error('Error adding to cart:', error);
+  const onAddToCart = (obj) => {
+    if (!cartItems.some(item => item.imageUrl === obj.imageUrl)) {
+      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
+        .then((response) => {
+          setCartItems(prev => [...prev, response.data]);
+        })
+        .catch((error) => {
+        });
+    } else {
     }
   };
 
-  const removeFromCart = async (id) => {
-    try {
-      await axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`);
-      setCartItems(prev => prev.filter(item => item.id !== id));
-    } catch (error) {
-      console.error('Error removing from cart:', error);
+  const onAddFavorite = (item) => {
+    if (!isFavorite.includes(item)) {
+      setFavorite(prev => [...prev, item]);
     }
+
+  };
+  const removeFromCart = (id) => {
+    axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`)
+      .then(() => {
+        setCartItems(prev => prev.filter(item => item.id !== id));
+      })
+      .catch((error) => {
+        console.error('Error removing from cart:', error);
+      });
   };
 
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
-  }
+  };
 
 
   return (
     <div className="wrapper clear">
       {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} onRemoveFromCart={removeFromCart} />}
       <Header onClickCard={() => setCardOpened(true)} />
-      <div className="content p-40">
-        <div className="d-flex align-center justify-between mb-30">
-          <h1> {searchValue ? `Поиск по запросу:  ${searchValue}` : 'Все кроссовки'}</h1>
-          <div className="search-block d-flex align-center">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.25 15.25L11.8855 11.8795L15.25 15.25ZM13.75 7.375C13.75 9.06576 13.0784 10.6873 11.8828 11.8828C10.6873 13.0784 9.06576 13.75 7.375 13.75C5.68424 13.75 4.06274 13.0784 2.86719 11.8828C1.67165 10.6873 1 9.06576 1 7.375C1 5.68424 1.67165 4.06274 2.86719 2.86719C4.06274 1.67165 5.68424 1 7.375 1C9.06576 1 10.6873 1.67165 11.8828 2.86719C13.0784 4.06274 13.75 5.68424 13.75 7.375V7.375Z" stroke="#E4E4E4" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            <div>
-              <input placeholder="Поиск" onChange={onChangeSearchInput} value={searchValue} />
-              {searchValue && <img src="/img/btn-remove.svg" alt="remove-button" className="removeBtn  cu-p" onClick={() => { setSearchValue('') }}></img>}
-            </div>
-          </div>
-        </div>
+      <Routes>
+        <Route path="/" element={
+          <Home
+            searchValue={searchValue}
+            onChangeSearchInput={onChangeSearchInput}
+            setSearchValue={setSearchValue}
+            items={items}
+            onAddToCart={onAddToCart}
+            onAddFavorite={onAddFavorite}
+          >
+          </Home>
+        } exact></Route>
+      </Routes>
 
-        {/* cards */}
-        <div className="d-flex flex-wrap">
-          {items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) => (
-            // Таким образом, передача функции через анонимную функцию onPlus={() => onAddToCart(item)} гарантирует, что onAddToCart будет вызвана только при клике на кнопку, а не сразу при рендеринге компонента.
-            <Card key={`card-${index}`} title={item.title} price={item.price} imageUrl={item.imageUrl} onPlus={() => onAddToCart(item)} onFavorite={() => { }} />
-          ))}
+      <Routes>
+        <Route path="/favorites" element={
 
-        </div>
-      </div>
+          <Favorite
+            searchValue={searchValue}
+            items={isFavorite}
+            onAddFavorite={onAddFavorite}
+          >
+          </Favorite>
+
+        } exact></Route>
+      </Routes>
     </div>
   );
 }

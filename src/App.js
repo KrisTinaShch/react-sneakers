@@ -44,11 +44,15 @@ function App() {
   };
 
   const onAddFavorite = (item) => {
-    if (!isFavorite.includes(item)) {
-      setFavorite(prev => [...prev, item]);
-    }
-
+    setFavorite(prev => {
+      if (prev.some(fav => fav.id === item.id)) {
+        return prev.filter(fav => fav.id !== item.id);
+      } else {
+        return [...prev, item];
+      }
+    });
   };
+
   const removeFromCart = (id) => {
     axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`)
       .then(() => {
@@ -89,6 +93,7 @@ function App() {
             searchValue={searchValue}
             items={isFavorite}
             onAddFavorite={onAddFavorite}
+            favorite={true}
           >
           </Favorite>
 

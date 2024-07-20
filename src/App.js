@@ -40,6 +40,7 @@ function App() {
         .catch((error) => {
         });
     } else {
+      setCartItems((prev) => prev.filter((item) => item.imageUrl !== obj.imageUrl))
     }
   };
 

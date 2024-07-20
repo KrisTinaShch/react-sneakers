@@ -47,7 +47,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
                     <li className="d-flex">
                       <span>Налог 5%: </span>
                       <div></div>
-                      <b>1074 руб. </b>
+                      <b>1074 руб.  </b>
                     </li>
                   </ul>
                   <button className="greenButton">

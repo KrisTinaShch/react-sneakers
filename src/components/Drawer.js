@@ -35,7 +35,9 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
                   </div>
                   <img src="/img/btn-remove.svg" alt="remove-button" className="removeBtn" onClick={() => onRemoveFromCart(item.id)} />
                 </div>
+
               ))}
+
               <div>
                 <div className="cartTotalBlock">
                   <ul>

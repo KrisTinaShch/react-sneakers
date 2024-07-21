@@ -32,15 +32,32 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    if (!cartItems.some(item => item.imageUrl === obj.imageUrl)) {
-      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
-        .then((response) => {
-          setCartItems(prev => [...prev, response.data]);
-        })
-        .catch((error) => {
-        });
-    } else {
-      setCartItems((prev) => prev.filter((item) => item.imageUrl !== obj.imageUrl))
+    // if (!cartItems.some(item => item.imageUrl === obj.imageUrl)) {
+    //   axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
+    //     .then((response) => {
+    //       setCartItems(prev => [...prev, response.data]);
+    //     })
+    //     .catch((error) => {
+    //     });
+    // } else {
+    //   setCartItems((prev) => prev.filter((item) => item.id !== obj.id));
+    //   axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${obj.id}`)
+    //     .then(() => {
+    //       setCartItems(prev => prev.filter(item => item.id !== obj.id));
+    //       console.log('done');
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error removing from cart:', error);
+    //     });
+    // }
+
+    if (cartItems.find((item) => +item.id === +obj.id)) {
+      axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${obj.id}`)
+      setCartItems((prev) => prev.filter((item) => +item.id !== +obj.id));
+    }
+    else{
+      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
+      setCartItems(prev => [...prev, obj]);
     }
   };
 
@@ -50,11 +67,13 @@ function App() {
         return prev.filter(fav => fav.id !== item.id);
       } else {
         return [...prev, item];
+
       }
     });
   };
 
   const removeFromCart = (id) => {
+    console.log(id + `id`)
     axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`)
       .then(() => {
         setCartItems(prev => prev.filter(item => item.id !== id));

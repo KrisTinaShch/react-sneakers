@@ -1,5 +1,7 @@
 import Card from '../components/Card/'
-function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite }) {
+function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, added, cartItems }) {
+    console.log(cartItems);
+    console.log(items);
     return (
         <div className="content p-40">
             <div className="d-flex align-center justify-between mb-30">
@@ -19,7 +21,7 @@ function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddTo
             <div className="d-flex flex-wrap">
                 {items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) => (
                     // Таким образом, передача функции через анонимную функцию onPlus={() => onAddToCart(item)} гарантирует, что onAddToCart будет вызвана только при клике на кнопку, а не сразу при рендеринге компонента.
-                    <Card key={`card-${index}`} title={item.title} price={item.price} imageUrl={item.imageUrl} onPlus={() => onAddToCart(item)} onFavorite={() => { onAddFavorite(item) }} added/>
+                    <Card key={`card-${index}`} title={item.title} price={item.price} imageUrl={item.imageUrl} onPlus={() => onAddToCart(item)} onFavorite={() => { onAddFavorite(item) }} added={cartItems.some((obj) => Number(obj.id) === Number(item.id))} />
                 ))}
 
             </div>

@@ -32,32 +32,22 @@ function App() {
   }, []);
 
   const onAddToCart = (obj) => {
-    // if (!cartItems.some(item => item.imageUrl === obj.imageUrl)) {
-    //   axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
-    //     .then((response) => {
-    //       setCartItems(prev => [...prev, response.data]);
-    //     })
-    //     .catch((error) => {
-    //     });
-    // } else {
-    //   setCartItems((prev) => prev.filter((item) => item.id !== obj.id));
-    //   axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${obj.id}`)
-    //     .then(() => {
-    //       setCartItems(prev => prev.filter(item => item.id !== obj.id));
-    //       console.log('done');
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error removing from cart:', error);
-    //     });
-    // }
-
-    if (cartItems.find((item) => +item.id === +obj.id)) {
+    if (!cartItems.some(item => item.parentID === obj.parentID)) {
+      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
+        .then((response) => {
+          setCartItems(prev => [...prev, response.data]);
+        })
+        .catch((error) => {
+        });
+    } else {
+      setCartItems((prev) => prev.filter((item) => item.id !== obj.id));
       axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${obj.id}`)
-      setCartItems((prev) => prev.filter((item) => +item.id !== +obj.id));
-    }
-    else{
-      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
-      setCartItems(prev => [...prev, obj]);
+        .then(() => {
+          setCartItems(prev => prev.filter(item => item.id !== obj.id));
+        })
+        .catch((error) => {
+
+        });
     }
   };
 
@@ -73,7 +63,6 @@ function App() {
   };
 
   const removeFromCart = (id) => {
-    console.log(id + `id`)
     axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`)
       .then(() => {
         setCartItems(prev => prev.filter(item => item.id !== id));
@@ -86,8 +75,6 @@ function App() {
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   };
-
-
   return (
     <div className="wrapper clear">
       {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} onRemoveFromCart={removeFromCart} />}
@@ -101,6 +88,8 @@ function App() {
             items={items}
             onAddToCart={onAddToCart}
             onAddFavorite={onAddFavorite}
+            added={cartItems.some((obj) => Number(obj.id) === Number(obj.id))}
+            cartItems={cartItems}
           >
           </Home>
         } exact></Route>

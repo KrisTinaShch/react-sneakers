@@ -14,21 +14,13 @@ function App() {
   const [isFavorite, setFavorite] = React.useState([]);
 
   React.useEffect(() => {
-    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items')
-      .then((res) => {
-        setItems(res.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching items:', error);
-      });
-
-    axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart')
-      .then((res) => {
-        setCartItems(res.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching cart items:', error);
-      });
+    async function fetchData() {
+      const cartResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/Cart');
+      const itemResponse = await axios.get('https://669559e34bd61d8314cb039a.mockapi.io/items');
+      setCartItems(cartResponse.data);
+      setItems(itemResponse.data);
+    }
+    fetchData()
   }, []);
 
   const onAddToCart = (obj) => {

@@ -82,7 +82,6 @@ function App() {
             items={items}
             onAddToCart={onAddToCart}
             onAddFavorite={onAddFavorite}
-            added={cartItems.some((obj) => Number(obj.id) === Number(obj.id))}
             cartItems={cartItems}
             isLoading={isLoading}
           >

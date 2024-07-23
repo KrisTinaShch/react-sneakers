@@ -1,19 +1,19 @@
 import Card from '../components/Card/'
 function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, added, cartItems, isLoading }) {
-    const textFilter = items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()));
+    const textFilter = items.filter((item) => item?.title.toLowerCase().includes(searchValue.toLowerCase()));
     const renderItems = () => {
         return (isLoading ? [...Array(10)] : textFilter).map((item, index) => (
             <Card
                 key={`card-${index}`}
-                title={item ? item.title : 'Loading...'}
-                price={item ? item.price : 0}
-                imageUrl={item ? item.imageUrl : 'placeholder-image-url'}
-                onPlus={() => item && onAddToCart(item)}
-                onFavorite={() => item && onAddFavorite(item)}
-                added={item && cartItems.some((obj) => Number(obj.id) === Number(item.id))}
+                title={item ? item.title : ''}
+                price={item ? item.price : ''}
+                imageUrl={item ? item.imageUrl : ''}
+                onPlus={() => onAddToCart(item)}
+                onFavorite={() => onAddFavorite(item)}
+                added={cartItems.some((obj) => (obj.parentID) === (item.parentID))}
                 loading={isLoading}
             />
-        ))
+        ));
     }
     return (
         <div className="content p-40">

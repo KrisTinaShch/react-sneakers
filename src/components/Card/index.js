@@ -1,7 +1,7 @@
 import styles from './Card.module.scss'
 import React from 'react';
 import ContentLoader from "react-content-loader";
-function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favorite = false, added = false, isLoading = false }) {
+function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favorite = false, added = false, loading = false }) {
 
   const [isAdded, setIsAdded] = React.useState(added);
   const [isFavorite, setIsFavorite] = React.useState(favorite);
@@ -18,7 +18,7 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
 
   return (
     <div className={styles.card}>
-      {isLoading ? <ContentLoader
+      {loading ? <ContentLoader
         speed={2}
         width={400}
         height={300}
@@ -32,7 +32,7 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
         <rect x="0" y="220" rx="5" ry="5" width="100" height="25" />
         <rect x="117" y="220" rx="5" ry="5" width="30" height="25" />
       </ContentLoader>
-      :<>
+        : <>
           <div className={styles.favorite} onClick={onClickFavorite}>
             <img src={isFavorite ? "/img/heart-liked.svg" : "/img/heart-unliked.svg"} alt="unliked"></img>
           </div>
@@ -48,8 +48,8 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
 
             </button>
           </div>
-      </>}
-    
+        </>}
+
     </div>
   )
 }

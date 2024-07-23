@@ -1,7 +1,20 @@
 import Card from '../components/Card/'
-function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, added, cartItems }) {
-    console.log(cartItems);
-    console.log(items);
+function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, added, cartItems, isLoading }) {
+    const textFilter = items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()));
+    const renderItems = () => {
+        return (isLoading ? [...Array(10)] : textFilter).map((item, index) => (
+            <Card
+                key={`card-${index}`}
+                title={item ? item.title : 'Loading...'}
+                price={item ? item.price : 0}
+                imageUrl={item ? item.imageUrl : 'placeholder-image-url'}
+                onPlus={() => item && onAddToCart(item)}
+                onFavorite={() => item && onAddFavorite(item)}
+                added={item && cartItems.some((obj) => Number(obj.id) === Number(item.id))}
+                loading={isLoading}
+            />
+        ))
+    }
     return (
         <div className="content p-40">
             <div className="d-flex align-center justify-between mb-30">
@@ -19,11 +32,7 @@ function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddTo
 
             {/* cards */}
             <div className="d-flex flex-wrap">
-                {items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) => (
-                    // Таким образом, передача функции через анонимную функцию onPlus={() => onAddToCart(item)} гарантирует, что onAddToCart будет вызвана только при клике на кнопку, а не сразу при рендеринге компонента.
-                    <Card key={`card-${index}`} title={item.title} price={item.price} imageUrl={item.imageUrl} onPlus={() => onAddToCart(item)} onFavorite={() => { onAddFavorite(item) }} added={cartItems.some((obj) => Number(obj.id) === Number(item.id))} />
-                ))}
-
+                {renderItems()}
             </div>
         </div>
     )

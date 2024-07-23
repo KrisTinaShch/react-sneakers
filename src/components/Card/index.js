@@ -6,7 +6,7 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
   React.useEffect(() => {
     setIsAdded(added);
   }, [added]);
-  
+
   const [isAdded, setIsAdded] = React.useState(added);
   const [isFavorite, setIsFavorite] = React.useState(favorite);
   const obj = { title, imageUrl, price, id, parentID: id }
@@ -14,7 +14,7 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
     onFavorite(obj);
     setIsFavorite(!isFavorite);
   }
- 
+
 
   const onClickPlus = () => {
     onPlus(obj);

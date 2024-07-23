@@ -1,6 +1,10 @@
 
+import React from 'react';
 import Card from '../components/Card/'
-function Favorites({ items, onAddFavorite, searchValue, favorite}) {
+import  AppContext  from '../context'
+function Favorites({ onAddFavorite, searchValue, favorite }) {
+    const { items } = React.useContext(AppContext);
+
     return (
         <div className="content p-40">
             <div className="d-flex align-center justify-between mb-30">
@@ -10,7 +14,7 @@ function Favorites({ items, onAddFavorite, searchValue, favorite}) {
             <div className="d-flex flex-wrap">
                 <div className="d-flex flex-wrap">
                     {items.filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) => (
-                        <Card key={`card-${index}`} favorite={true} title={item.title} price={item.price} imageUrl={item.imageUrl} onFavorite={() => { onAddFavorite(item) } } />
+                        <Card key={`card-${index}`} favorite={true} title={item.title} price={item.price} imageUrl={item.imageUrl} onFavorite={() => { onAddFavorite(item) }} />
                     ))}
                 </div>
             </div>

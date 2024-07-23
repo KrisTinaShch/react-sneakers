@@ -1,5 +1,11 @@
+import React from 'react';
 import Card from '../components/Card/'
-function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, added, cartItems, isLoading }) {
+import AppContext from '../context'
+
+function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddToCart, onAddFavorite, cartItems, isLoading }) {
+
+    const { isItemAdded } = React.useContext(AppContext);
+
     const textFilter = items.filter((item) => item?.title.toLowerCase().includes(searchValue.toLowerCase()));
     const renderItems = () => {
         return (isLoading ? [...Array(10)] : textFilter).map((item, index) => (
@@ -10,7 +16,7 @@ function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddTo
                 imageUrl={item ? item.imageUrl : ''}
                 onPlus={() => onAddToCart(item)}
                 onFavorite={() => onAddFavorite(item)}
-                added={cartItems.some((obj) => (obj.parentID) === (item.parentID))}
+                added={item ? isItemAdded(item.parentID) : ''}
                 loading={isLoading}
             />
         ));

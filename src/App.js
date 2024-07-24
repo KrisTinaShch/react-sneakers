@@ -71,9 +71,10 @@ function App() {
     setSearchValue(event.target.value);
   };
 
-  const isItemAdded = (parentID) =>{
-   return cartItems.some((obj) => (obj.parentID) === (parentID))
+  const isItemAdded = (imageUrl) => {
+    return cartItems.some((obj) => (obj.imageUrl) === (imageUrl))
   }
+
   return (
     <AppContext.Provider value={{ cartItems, isFavorite, items, isItemAdded }}>
       <div className="wrapper clear">

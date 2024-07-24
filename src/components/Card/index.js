@@ -1,15 +1,15 @@
 import styles from './Card.module.scss'
 import React from 'react';
 import ContentLoader from "react-content-loader";
-function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favorite = false, added = false, loading = false }) {
+import AppContext from '../../context'
 
-  React.useEffect(() => {
-    setIsAdded(added);
-  }, [added]);
+function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favorite = false, loading = false }) {
 
-  const [isAdded, setIsAdded] = React.useState(added);
+  const { isItemAdded } = React.useContext(AppContext);
+
   const [isFavorite, setIsFavorite] = React.useState(favorite);
   const obj = { title, imageUrl, price, id, parentID: id }
+
   const onClickFavorite = () => {
     onFavorite(obj);
     setIsFavorite(!isFavorite);
@@ -18,7 +18,6 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
 
   const onClickPlus = () => {
     onPlus(obj);
-    setIsAdded(!isAdded);
   }
 
   return (
@@ -49,7 +48,7 @@ function Card({ onFavorite, imageUrl, title, price, id, parentID, onPlus, favori
               <b>{price} руб.</b>
             </div>
             <button className="button" onClick={onClickPlus}>
-              <img src={isAdded ? "./img/button-checked.svg" : "./img/button-unchecked.svg"} alt="" />
+              <img src={isItemAdded(obj.imageUrl) ? "./img/button-checked.svg" : "./img/button-unchecked.svg"} alt="" />
 
             </button>
           </div>

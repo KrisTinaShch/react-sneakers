@@ -2,6 +2,7 @@ import Header from './components/Header'
 import Drawer from './components/Drawer'
 import Home from './pages/Home'
 import Favorite from './pages/Favorites'
+import Orders from './pages/Orders'
 import React from 'react';
 import axios from 'axios';
 import { Routes, Route } from 'react-router-dom'
@@ -14,7 +15,7 @@ function App() {
   const [searchValue, setSearchValue] = React.useState('');
   const [isFavorite, setFavorite] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  
+
 
   React.useEffect(() => {
     async function fetchData() {
@@ -27,24 +28,20 @@ function App() {
     fetchData()
   }, []);
 
-  const onAddToCart = (obj) => {
-    if (!cartItems.some(item => item.parentID === obj.parentID)) {
-      axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj)
-        .then((response) => {
-          setCartItems(prev => [...prev, response.data]);
-        })
-        .catch((error) => {
-        });
-    } else {
-      setCartItems((prev) => prev.filter((item) => item.id !== obj.id));
-      axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${obj.id}`)
-        .then(() => {
-          setCartItems(prev => prev.filter(item => item.id !== obj.id));
-        })
-        .catch((error) => {
-
-        });
+  const onAddToCart = async (obj) => {
+    try {
+      const findItem = cartItems.find((item) => Number(item.parentID) === Number(obj.id));
+      if (findItem) {
+        setCartItems(prev => prev.filter(item => Number(item.parentID) !== Number(obj.id)));
+        await axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${findItem.id}`);
+      } else {
+        const { data } = await axios.post('https://669559e34bd61d8314cb039a.mockapi.io/Cart', obj);
+        setCartItems(prev => [...prev, data]);
+      }
+    } catch {
+      alert('Ошибка при добавлении продукта');
     }
+
   };
 
   const onAddFavorite = (item) => {
@@ -61,7 +58,7 @@ function App() {
   const removeFromCart = (id) => {
     axios.delete(`https://669559e34bd61d8314cb039a.mockapi.io/Cart/${id}`)
       .then(() => {
-        setCartItems(prev => prev.filter(item => item.id !== id));
+        setCartItems(prev => prev.filter(item => Number(item.id) !== Number(id)));
       })
       .catch((error) => {
         console.error('Error removing from cart:', error);
@@ -72,14 +69,15 @@ function App() {
     setSearchValue(event.target.value);
   };
 
-  const isItemAdded = (imageUrl) => {
-    return cartItems.some((obj) => (obj.imageUrl) === (imageUrl))
+  const isItemAdded = (id) => {
+    return cartItems.some((obj) => (obj.parentID) === (id))
   }
 
   return (
     <AppContext.Provider value={{ cartItems, isFavorite, items, isItemAdded, setCardOpened, setCartItems }}>
       <div className="wrapper clear">
-        {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} onRemoveFromCart={removeFromCart} />}
+        {cardOpened && <Drawer items={cartItems} onClose={() => setCardOpened(false)} onRemoveFromCart={removeFromCart} opened={cardOpened} />}
+
         <Header onClickCard={() => setCardOpened(true)} />
         <Routes>
           <Route path="/" element={
@@ -107,6 +105,12 @@ function App() {
             >
             </Favorite>
 
+          } exact></Route>
+        </Routes>
+
+        <Routes>
+          <Route path="/orders" element={
+            <Orders searchValue={searchValue}></Orders>
           } exact></Route>
         </Routes>
       </div>

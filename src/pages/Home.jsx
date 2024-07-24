@@ -10,6 +10,8 @@ function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddTo
                 title={item ? item.title : ''}
                 price={item ? item.price : ''}
                 imageUrl={item ? item.imageUrl : ''}
+                id={item ? item.id : ''}
+                parentID={item ? item.parentID : ''}
                 onPlus={() => onAddToCart(item)}
                 onFavorite={() => onAddFavorite(item)}
                 loading={isLoading}

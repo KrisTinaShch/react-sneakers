@@ -1,15 +1,14 @@
 import Info from './Info'
 import React from 'react'
-import AppContext from '../context';
-function Drawer({ onClose, items = [], onRemoveFromCart }) {
+import { useCart } from '../hooks/useCart'
 
-  const { setCartItems, cartItems } = React.useContext(AppContext);
-  const totalPrice = cartItems.reduce((sum, obj) => obj.price + sum, 0);
+function Drawer({ onClose, items = [], onRemoveFromCart ,opened}) {
+  const { setCartItems, totalPrice } = useCart();
 
   const [isOrderCompleted, setIsOrderCompleted] = React.useState(false);
   const onClickOrder = () => {
     setIsOrderCompleted(true);
-    setCartItems([])
+    setCartItems([]);
   }
   return (
     <div>
@@ -55,7 +54,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
                       <li className="d-flex">
                         <span>Налог 5%: </span>
                         <div></div>
-                        <b>{totalPrice * 0.05} руб.  </b>
+                        <b>{Math.round(totalPrice * 0.05)} руб.  </b>
                       </li>
                     </ul>
                     <button className="greenButton" onClick={onClickOrder}>

@@ -3,7 +3,9 @@ import React from 'react'
 import AppContext from '../context';
 function Drawer({ onClose, items = [], onRemoveFromCart }) {
 
-  const { setCartItems } = React.useContext(AppContext);
+  const { setCartItems, cartItems } = React.useContext(AppContext);
+  const totalPrice = cartItems.reduce((sum, obj) => obj.price + sum, 0);
+
   const [isOrderCompleted, setIsOrderCompleted] = React.useState(false);
   const onClickOrder = () => {
     setIsOrderCompleted(true);
@@ -48,12 +50,12 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
                       <li className="d-flex">
                         <span>Итого: </span>
                         <div></div>
-                        <b>21 498 руб. </b>
+                        <b>{totalPrice} руб. </b>
                       </li>
                       <li className="d-flex">
                         <span>Налог 5%: </span>
                         <div></div>
-                        <b>1074 руб.  </b>
+                        <b>{totalPrice * 0.05} руб.  </b>
                       </li>
                     </ul>
                     <button className="greenButton" onClick={onClickOrder}>

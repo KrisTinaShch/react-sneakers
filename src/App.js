@@ -14,6 +14,7 @@ function App() {
   const [searchValue, setSearchValue] = React.useState('');
   const [isFavorite, setFavorite] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  
 
   React.useEffect(() => {
     async function fetchData() {

@@ -1,3 +1,4 @@
+import Info from './Info'
 function Drawer({ onClose, items = [], onRemoveFromCart }) {
   return (
     <div>
@@ -10,20 +11,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
 
         <div className="items d-flex flex-column  justify-between">
           {items.length === 0 ? (
-            <div className="empty-cart d-flex flex-column align-center justify-center">
-              <img src="./img/empty-cart.svg" alt="empty-cart" />
-              <div>
-                <h3>Корзина пустая</h3>
-                <p>Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-              </div>
-              <button className="greenButton left" onClick={onClose}>
-                <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 7H1.28571" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M7.28564 1L1.28564 7L7.28564 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                Вернуться назад
-              </button>
-            </div>
+            <Info title='Корзина пустая' description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.' image='../img/empty-cart.svg'></Info>
           ) : (
             <>
               <div>

@@ -80,7 +80,7 @@ function App() {
 
         <Header onClickCard={() => setCardOpened(true)} />
         <Routes>
-          <Route path="/" element={
+          <Route path="" element={
             <Home
               searchValue={searchValue}
               onChangeSearchInput={onChangeSearchInput}
@@ -96,7 +96,7 @@ function App() {
         </Routes>
 
         <Routes>
-          <Route path="/favorites" element={
+          <Route path="favorites" element={
 
             <Favorite
               searchValue={searchValue}
@@ -109,7 +109,7 @@ function App() {
         </Routes>
 
         <Routes>
-          <Route path="/orders" element={
+          <Route path="orders" element={
             <Orders searchValue={searchValue}></Orders>
           } exact></Route>
         </Routes>

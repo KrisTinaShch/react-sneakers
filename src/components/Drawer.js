@@ -16,7 +16,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart ,opened}) {
       <div className="drawer d-flex flex-column ">
         <h2 className="mb-30 d-flex justify-between">
           Корзина
-          <img src="/img/btn-remove.svg" alt="remove-button" className="removeBtn cu-p" onClick={onClose} />
+          <img src="img/btn-remove.svg" alt="remove-button" className="removeBtn cu-p" onClick={onClose} />
         </h2>
 
         <div className="items d-flex flex-column  justify-between">
@@ -37,7 +37,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart ,opened}) {
                       <p className="mb-5">{item.title}</p>
                       <b>{item.price} руб.</b>
                     </div>
-                    <img src="/img/btn-remove.svg" alt="remove-button" className="removeBtn" onClick={() => onRemoveFromCart(item.id)} />
+                    <img src="img/btn-remove.svg" alt="remove-button" className="removeBtn" onClick={() => onRemoveFromCart(item.id)} />
                   </div>
 
                 ))}

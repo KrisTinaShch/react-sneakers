@@ -28,7 +28,7 @@ function Home({ searchValue, onChangeSearchInput, setSearchValue, items, onAddTo
                     </svg>
                     <div>
                         <input placeholder="Поиск" onChange={onChangeSearchInput} value={searchValue} />
-                        {searchValue && <img src="/img/btn-remove.svg" alt="remove-button" className="removeBtn  cu-p" onClick={() => { setSearchValue('') }}></img>}
+                        {searchValue && <img src="img/btn-remove.svg" alt="remove-button" className="removeBtn  cu-p" onClick={() => { setSearchValue('') }}></img>}
                     </div>
                 </div>
             </div>

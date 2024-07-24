@@ -1,5 +1,14 @@
 import Info from './Info'
+import React from 'react'
+import AppContext from '../context';
 function Drawer({ onClose, items = [], onRemoveFromCart }) {
+
+  const { setCartItems } = React.useContext(AppContext);
+  const [isOrderCompleted, setIsOrderCompleted] = React.useState(false);
+  const onClickOrder = () => {
+    setIsOrderCompleted(true);
+    setCartItems([])
+  }
   return (
     <div>
       <div className="overlay cu-p" onClick={onClose}></div>
@@ -11,7 +20,12 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
 
         <div className="items d-flex flex-column  justify-between">
           {items.length === 0 ? (
-            <Info title='Корзина пустая' description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.' image='../img/empty-cart.svg'></Info>
+            <Info
+              title={isOrderCompleted ? 'Заказ оформлен!' : 'Корзина пустая'}
+              description={isOrderCompleted ? "Ваш заказ #18 скоро будет передан курьерской доставке" : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
+              image={isOrderCompleted ? '../img/completed-cart.svg' : '../img/empty-cart.svg'}>
+            </Info>
+
           ) : (
             <>
               <div>
@@ -42,7 +56,7 @@ function Drawer({ onClose, items = [], onRemoveFromCart }) {
                         <b>1074 руб.  </b>
                       </li>
                     </ul>
-                    <button className="greenButton">
+                    <button className="greenButton" onClick={onClickOrder}>
                       Оформить заказ
                       <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 7H14.7143" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

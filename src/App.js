@@ -50,7 +50,6 @@ function App() {
         return prev.filter(fav => fav.id !== item.id);
       } else {
         return [...prev, item];
-
       }
     });
   };
